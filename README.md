@@ -31,7 +31,7 @@ Proyek ini bertujuan untuk menyediakan visualisasi interaktif dari data gempa bu
    cd Visualisasi-Data-Gempa-Bumi-Indonesia
 2. Buka index.html di browser untuk melihat peta interaktif.
 3. Akses linechart.html untuk melihat grafik tren jumlah gempa dari waktu ke waktu.
-4.Lihat histogram.html untuk melihat distribusi frekuensi gempa berdasarkan magnitudo.
+4. Lihat histogram.html untuk melihat distribusi frekuensi gempa berdasarkan magnitudo.
 
 ## 📊 Data
 Data gempa bumi diambil dari sumber terpercaya dan disimpan dalam format CSV.
