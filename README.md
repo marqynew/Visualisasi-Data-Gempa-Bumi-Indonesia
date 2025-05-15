@@ -1,5 +1,3 @@
-# Visualisasi-Data-Gempa-Bumi-Indonesia
-
 # 🌍 Visualisasi Data Gempa Bumi Indonesia
 
 Proyek ini bertujuan untuk menyediakan visualisasi interaktif dari data gempa bumi di Indonesia menggunakan HTML, JavaScript, dan pustaka seperti Leaflet dan Chart.js. Dengan pendekatan ini, pengguna dapat memahami distribusi spasial dan temporal aktivitas seismik di wilayah rawan gempa.
