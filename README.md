@@ -1,12 +1,14 @@
 # 🌍 Visualisasi Data Gempa Bumi Indonesia
 
-Proyek ini bertujuan untuk menyediakan visualisasi interaktif dari data gempa bumi di Indonesia menggunakan HTML, JavaScript, dan pustaka seperti Leaflet dan Chart.js. Dengan pendekatan ini, pengguna dapat memahami distribusi spasial dan temporal aktivitas seismik di wilayah rawan gempa.
+Proyek ini bertujuan untuk menyediakan visualisasi interaktif dari data gempa bumi di Indonesia dari Tahun 2009-2022 menggunakan HTML, JavaScript, dan pustaka seperti Leaflet dan Chart.js. Dengan pendekatan ini, pengguna dapat memahami distribusi spasial dan temporal aktivitas seismik di wilayah rawan gempa.
 
 ## 📌 Fitur Utama
 
-* **Peta Interaktif**: Menampilkan lokasi gempa bumi di Indonesia menggunakan Leaflet.
-* **Histogram**: Visualisasi distribusi frekuensi gempa berdasarkan magnitudo.
-* **Grafik Waktu**: Menampilkan tren jumlah gempa dari waktu ke waktu.
+* **Peta Interaktif**: Menampilkan lokasi gempa bumi di Indonesia dari tahun 2009-2022 berdasarkan kategori kedalaman dan magnitudo.
+* **Histogram**: Visualisasi distribusi frekuensi gempa berdasarkan kedalaman.
+* **Line Chart**: Menampilkan tren jumlah gempa dari tahun 2009-2022.
+* **ScatterPlot**: Menampilkan hubungan kedalaman dan magnitudo gempa.
+* **Bar Chart**: Menampilkan 5 wilayah dengan frekuensi gempa tertinggi.
 
 ## 📦 Struktur Direktori
 
@@ -40,5 +42,5 @@ Proyek ini bertujuan untuk menyediakan visualisasi interaktif dari data gempa bu
 
 ## 📊 Data
 
-Data gempa bumi diambil dari sumber terpercaya dan disimpan dalam format CSV.
+Data gempa bumi diambil dari(https://www.kaggle.com/datasets/kekavigi/earthquakes-in-indonesia/data) dan disimpan dalam format CSV.
 File indonesia-province.json berisi data geoJSON untuk peta interaktif.
