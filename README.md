@@ -2,7 +2,6 @@
 
 Proyek ini bertujuan untuk menyediakan visualisasi interaktif dari data gempa bumi di Indonesia dari Tahun 2009-2022 menggunakan HTML, JavaScript, dan pustaka seperti Leaflet dan Chart.js. Dengan pendekatan ini, pengguna dapat memahami distribusi spasial dan temporal aktivitas seismik di wilayah rawan gempa.
 ![Screenshot of Earthquake Map](images/Screenshot%202025-05-15%20174417.png)
-![Alt text](Screenshot 2025-05-15 174417.png)
 
 ## 📌 Fitur Utama
 
