@@ -9,6 +9,7 @@ Proyek ini bertujuan untuk menyediakan visualisasi interaktif dari data gempa bu
 - **Grafik Waktu**: Menampilkan tren jumlah gempa dari waktu ke waktu.
 
 ## 📦 Struktur Direktori
+```
 /Visualisasi-Data-Gempa-Bumi-Indonesia
 ├── index.html           # Halaman utama
 ├── linechart.html       # Grafik tren waktu
@@ -17,6 +18,7 @@ Proyek ini bertujuan untuk menyediakan visualisasi interaktif dari data gempa bu
 ├── indonesia-province.json # Data geoJSON untuk peta
 ├── css/                 # Gaya CSS
 └── js/                  # Skrip JavaScript
+```
 
 ## 🔧 Prasyarat
 
