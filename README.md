@@ -19,8 +19,8 @@ Proyek ini bertujuan untuk menyediakan visualisasi interaktif dari data gempa bu
 ├── histogram.html       # Histogram distribusi magnitudo
 ├── data.csv             # Data gempa bumi
 ├── indonesia-province.json # Data geoJSON untuk peta
-├── css/                 # Gaya CSS
-└── js/                  # Skrip JavaScript
+├── css/style.css        # Gaya CSS
+└── js/maps.js           # Skrip JavaScript
 ```
 
 ## 🔧 Prasyarat
