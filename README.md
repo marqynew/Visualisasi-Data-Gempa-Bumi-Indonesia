@@ -33,9 +33,9 @@ This project aims to provide an interactive visualization of earthquake data in 
    cd Visualisasi-Data-Gempa-Bumi-Indonesia
 2. Open `index.html` in your browser to view the interactive map.
 
-3. Access linechart.html to see the earthquake occurrence trend over time.
+3. Access `linechart.html` to see the earthquake occurrence trend over time.
 
-4. View histogram.html to see the distribution of earthquake magnitudes.
+4. View `histogram.html` to see the distribution of earthquake magnitudes.
 
 ## 📊 Data
 The earthquake data is sourced from reliable providers and stored in CSV format. The indonesia-province.json file contains GeoJSON data for the interactive map.
