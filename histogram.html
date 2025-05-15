@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <title>Histogram - Visualisasi Data Gempa Bumi Indonesia</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        color: #333;
+        line-height: 1.6;
+      }
+
+      /* Header Styles */
+      header {
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        color: white;
+        padding: 20px 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        font-weight: 700;
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Navigation */
+      nav ul {
+        list-style-type: none;
+        display: flex;
+        justify-content: center;
+        padding: 0;
+        margin-top: 15px;
+      }
+
+      nav ul li {
+        margin: 0 15px;
+        position: relative;
+      }
+
+      nav ul li a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        display: block;
+      }
+
+      nav ul li a:hover,
+      nav ul li.active a {
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Main Container */
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* Description Box */
+      .description-box {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border-left: 5px solid #3498db;
+      }
+
+      .description-box h3 {
+        color: #2c3e50;
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+      }
+
+      .description-box p {
+        margin-bottom: 12px;
+        color: #555;
+        text-align: justify;
+      }
+
+      .description-box ul {
+        margin-left: 20px;
+        margin-bottom: 15px;
+      }
+
+      .description-box li {
+        margin-bottom: 8px;
+        color: #555;
+      }
+
+      /* Chart Container */
+      .chart-container {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .chart-container h2 {
+        color: #2c3e50;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 600;
+      }
+
+      /* Filter Container */
+      .filter-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        border: 1px solid #e0e0e0;
+      }
+
+      .filter-container label {
+        font-weight: 600;
+        margin-right: 15px;
+        color: #2c3e50;
+        font-size: 1.1rem;
+      }
+
+      .filter-container select {
+        padding: 10px 15px;
+        border-radius: 8px;
+        border: 2px solid #dee2e6;
+        font-family: "Poppins", sans-serif;
+        font-size: 14px;
+        background: white;
+        color: #333;
+        margin-right: 15px;
+        transition: all 0.3s ease;
+      }
+
+      .filter-container select:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+      }
+
+      .filter-container button {
+        padding: 10px 25px;
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: "Poppins", sans-serif;
+        font-weight: 500;
+        font-size: 14px;
+        box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3);
+      }
+
+      .filter-container button:hover {
+        background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(52, 152, 219, 0.4);
+      }
+
+      .filter-container button:active {
+        transform: translateY(0);
+      }
+
+      /* Histogram Container */
+      #histogram {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      /* Tooltip */
+      .tooltip {
+        position: absolute;
+        text-align: center;
+        width: auto;
+        min-width: 140px;
+        padding: 12px;
+        font: 12px "Poppins", sans-serif;
+        background: rgba(44, 62, 80, 0.95);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        pointer-events: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+      }
+
+      .tooltip strong {
+        color: #3498db;
+      }
+
+      /* SVG Styling */
+      svg {
+        display: block;
+        margin: auto;
+        background: white;
+        border-radius: 10px;
+      }
+
+      /* Legend Styling */
+      .legend-text {
+        font-family: "Poppins", sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .container {
+          padding: 10px;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+
+        nav ul {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        nav ul li {
+          margin: 5px 0;
+        }
+
+        .filter-container {
+          text-align: center;
+        }
+
+        .filter-container label,
+        .filter-container select,
+        .filter-container button {
+          display: block;
+          margin: 10px auto;
+          max-width: 200px;
+        }
+
+        #histogram svg {
+          width: 100%;
+          height: auto;
+        }
+      }
+
+      /* Loading State */
+      .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+      }
+
+      .spinner {
+        border: 4px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 4px solid #3498db;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      /* Stats Box */
+      .stats-box {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        border: 1px solid #e0e0e0;
+      }
+
+      .stat-item {
+        text-align: center;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-item h4 {
+        color: #3498db;
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+        font-weight: 700;
+      }
+
+      .stat-item p {
+        color: #666;
+        font-size: 0.9rem;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>VISUALISASI DATA GEMPA BUMI INDONESIA</h1>
+      <nav>
+        <ul>
+          <li>
+            <a class="peta" href="index.html">Analisis Komprehensif</a>
+          </li>
+          <li class="active">
+            <a href="histogram.html">Histogram</a>
+          </li>
+          <li>
+            <a href="linechart.html">Linechart</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="container">
+      <div class="description-box">
+        <h3>Distribusi Kedalaman Gempa per Tahun (2009-2022)</h3>
+        <p>
+          Visualisasi histogram ini menunjukkan distribusi frekuensi gempa bumi berdasarkan 
+          kategori kedalaman untuk setiap tahun. Data dikelompokkan menjadi tiga kategori 
+          kedalaman yang memiliki karakteristik dan dampak yang berbeda terhadap permukaan bumi.
+        </p>
+        <ul>
+          <li>
+            <strong>Dangkal (≤ 30 km)</strong>: Gempa yang terjadi dekat permukaan
+            bumi, biasanya menghasilkan getaran yang lebih kuat dan potensi kerusakan lebih besar
+          </li>
+          <li>
+            <strong>Menengah (31-70 km)</strong>: Gempa dengan kedalaman sedang yang 
+            masih dapat dirasakan dengan cukup kuat di permukaan
+          </li>
+          <li>
+            <strong>Dalam (> 70 km)</strong>: Gempa yang terjadi jauh di dalam
+            kerak bumi, getarannya lebih lemah saat mencapai permukaan
+          </li>
+        </ul>
+        <p>
+          Gunakan filter tahun untuk menganalisis pola distribusi pada periode tertentu
+          atau lihat tren keseluruhan dari tahun 2009-2022.
+        </p>
+      </div>
+
+      <div class="chart-container">
+        <h2>Histogram Distribusi Kedalaman Gempa Bumi</h2>
+
+        <div class="filter-container">
+          <label for="tahun">Pilih Tahun:</label>
+          <select id="tahun">
+            <option value="all">Semua Tahun (2009-2022)</option>
+          </select>
+          <button onclick="updateHistogram()">
+            <span id="button-text">Tampilkan</span>
+            <div id="button-loading" class="spinner" style="display: none; width: 16px; height: 16px; margin-left: 5px;"></div>
+          </button>
+        </div>
+
+        <div id="histogram">
+          <div class="loading">
+            <div class="spinner"></div>
+          </div>
+        </div>
+
+        <div id="stats-container"></div>
+      </div>
+    </div>
+
+    <script>
+      // Variabel global untuk menyimpan data
+      let rawData = [];
+      let currentYear = 'all';
+
+      // Inisialisasi options tahun
+      function initializeYearOptions() {
+        const yearSelect = document.getElementById('tahun');
+        for (let year = 2009; year <= 2022; year++) {
+          const option = document.createElement('option');
+          option.value = year;
+          option.textContent = year;
+          yearSelect.appendChild(option);
+        }
+      }
+
+      // Fungsi untuk menghitung statistik
+      function calculateStatistics(data) {
+        const total = data.length;
+        const categories = {
+          'Dangkal': data.filter(d => d.kategori === 'Dangkal').length,
+          'Menengah': data.filter(d => d.kategori === 'Menengah').length,
+          'Dalam': data.filter(d => d.kategori === 'Dalam').length
+        };
+
+        return {
+          total,
+          categories,
+          percentages: {
+            'Dangkal': ((categories.Dangkal / total) * 100).toFixed(1),
+            'Menengah': ((categories.Menengah / total) * 100).toFixed(1),
+            'Dalam': ((categories.Dalam / total) * 100).toFixed(1)
+          }
+        };
+      }
+
+      // Fungsi untuk menampilkan statistik
+      function displayStatistics(stats, year) {
+        const statsContainer = document.getElementById('stats-container');
+        
+        const yearText = year === 'all' ? 'Semua Tahun' : `Tahun ${year}`;
+        
+        statsContainer.innerHTML = `
+          <div class="stats-box">
+            <div class="stat-item">
+              <h4>${stats.total.toLocaleString()}</h4>
+              <p>Total Gempa ${yearText}</p>
+            </div>
+            <div class="stat-item">
+              <h4>${stats.categories.Dangkal.toLocaleString()}</h4>
+              <p>Gempa Dangkal (${stats.percentages.Dangkal}%)</p>
+            </div>
+            <div class="stat-item">
+              <h4>${stats.categories.Menengah.toLocaleString()}</h4>
+              <p>Gempa Menengah (${stats.percentages.Menengah}%)</p>
+            </div>
+            <div class="stat-item">
+              <h4>${stats.categories.Dalam.toLocaleString()}</h4>
+              <p>Gempa Dalam (${stats.percentages.Dalam}%)</p>
+            </div>
+          </div>
+        `;
+      }
+
+      // Fungsi untuk menampilkan loading state
+      function showLoading(show = true) {
+        const buttonText = document.getElementById('button-text');
+        const buttonLoading = document.getElementById('button-loading');
+        
+        if (show) {
+          buttonText.style.display = 'none';
+          buttonLoading.style.display = 'inline-block';
+        } else {
+          buttonText.style.display = 'inline';
+          buttonLoading.style.display = 'none';
+        }
+      }
+
+      function updateHistogram() {
+        showLoading(true);
+        
+        const selectedYear = document.getElementById("tahun").value;
+        currentYear = selectedYear;
+
+        // Simulasi delay untuk loading
+        setTimeout(() => {
+          if (rawData.length === 0) {
+            // Load data jika belum ada
+            d3.csv("data.csv").then(function (data) {
+              // Proses data
+              data.forEach(function (d) {
+                d.depth = +d.depth; // Convert to number
+                if (d.depth <= 30) {
+                  d.kategori = "Dangkal";
+                } else if (d.depth <= 70) {
+                  d.kategori = "Menengah";
+                } else {
+                  d.kategori = "Dalam";
+                }
+              });
+              
+              rawData = data;
+              drawHistogram(data, selectedYear);
+              showLoading(false);
+            }).catch(error => {
+              console.error("Error loading data:", error);
+              showLoading(false);
+              document.getElementById('histogram').innerHTML = 
+                '<div style="text-align: center; color: #e74c3c; padding: 40px;">Error loading data. Please check the data.csv file.</div>';
+            });
+          } else {
+            drawHistogram(rawData, selectedYear);
+            showLoading(false);
+          }
+        }, 500);
+      }
+
+      function drawHistogram(data, selectedYear) {
+        // Filter data berdasarkan tahun
+        let filteredData = data;
+        if (selectedYear !== "all") {
+          filteredData = data.filter(d => d.tgl.substr(0, 4) == selectedYear);
+        }
+
+        // Hitung statistik dan tampilkan
+        const stats = calculateStatistics(filteredData);
+        displayStatistics(stats, selectedYear);
+
+        // Proses data untuk histogram
+        let processedData;
+        if (selectedYear === "all") {
+          // Untuk semua tahun, kelompokkan berdasarkan tahun dan kategori
+          const frekuensi = d3.rollup(
+            filteredData,
+            v => v.length,
+            d => d.tgl.substr(0, 4),
+            d => d.kategori
+          );
+          processedData = frekuensi;
+        } else {
+          // Untuk tahun tertentu, tampilkan distribusi per bulan
+          const frekuensi = d3.rollup(
+            filteredData,
+            v => v.length,
+            d => d.tgl.substr(5, 2), // Ambil bulan
+            d => d.kategori
+          );
+          processedData = frekuensi;
+        }
+
+        // Hapus histogram sebelumnya
+        d3.select("#histogram svg").remove();
+
+        // Setup dimensi
+        const containerWidth = document.getElementById('histogram').clientWidth;
+        const svgWidth = Math.min(containerWidth - 40, 1000);
+        const svgHeight = 600;
+        const margin = { top: 60, right: 120, bottom: 70, left: 80 };
+        const width = svgWidth - margin.left - margin.right;
+        const height = svgHeight - margin.top - margin.bottom;
+
+        // Buat SVG
+        const svg = d3
+          .select("#histogram")
+          .append("svg")
+          .attr("width", svgWidth)
+          .attr("height", svgHeight);
+
+        // Scales
+        const x = d3
+          .scaleBand()
+          .domain(Array.from(processedData.keys()).sort())
+          .range([margin.left, width + margin.left])
+          .padding(0.15);
+
+        const maxValue = d3.max(
+          Array.from(processedData.values()).flatMap(d => Array.from(d.values()))
+        );
+
+        const y = d3
+          .scaleLinear()
+          .domain([0, maxValue])
+          .nice()
+          .range([height + margin.top, margin.top]);
+
+        const color = d3
+          .scaleOrdinal()
+          .domain(["Dalam", "Menengah", "Dangkal"])
+          .range(["#4285F4", "#34A853", "#FBBC05"]);
+
+        // Tooltip
+        const tooltip = d3
+          .select("body")
+          .append("div")
+          .attr("class", "tooltip")
+          .style("opacity", 0);
+
+        // Draw bars
+        const groups = svg
+          .selectAll("g.bar-group")
+          .data(Array.from(processedData.entries()))
+          .enter()
+          .append("g")
+          .attr("class", "bar-group")
+          .attr("transform", d => `translate(${x(d[0])}, 0)`);
+
+        // Subgroups for each category
+        groups
+          .selectAll("rect")
+          .data(d => Array.from(d[1].entries()))
+          .enter()
+          .append("rect")
+          .attr("fill", d => color(d[0]))
+          .attr("x", d => {
+            const categories = ["Dalam", "Menengah", "Dangkal"];
+            const index = categories.indexOf(d[0]);
+            return (x.bandwidth() / 3) * index;
+          })
+          .attr("y", d => y(d[1]))
+          .attr("height", d => y(0) - y(d[1]))
+          .attr("width", x.bandwidth() / 3)
+          .attr("stroke", "white")
+          .attr("stroke-width", 1)
+          .on("mouseover", function (event, d) {
+            d3.select(this).style("opacity", 0.8);
+            tooltip.transition().duration(200).style("opacity", 0.9);
+            tooltip
+              .html(`
+                <strong>Kategori:</strong> ${d[0]}<br/>
+                <strong>Jumlah:</strong> ${d[1].toLocaleString()}<br/>
+                <strong>Periode:</strong> ${selectedYear === 'all' ? 'Tahun ' + groups.datum()[0] : 'Bulan ' + groups.datum()[0]}
+              `)
+              .style("left", (event.pageX + 10) + "px")
+              .style("top", (event.pageY - 28) + "px");
+          })
+          .on("mouseout", function () {
+            d3.select(this).style("opacity", 1);
+            tooltip.transition().duration(500).style("opacity", 0);
+          });
+
+        // Axes
+        svg
+          .append("g")
+          .attr("transform", `translate(0, ${height + margin.top})`)
+          .call(d3.axisBottom(x))
+          .selectAll("text")
+          .style("text-anchor", "middle")
+          .attr("font-family", "Poppins")
+          .attr("font-size", "12px");
+
+        svg
+          .append("g")
+          .attr("transform", `translate(${margin.left}, 0)`)
+          .call(d3.axisLeft(y).tickFormat(d3.format(",")))
+          .selectAll("text")
+          .attr("font-family", "Poppins")
+          .attr("font-size", "12px");
+
+        // Axis labels
+        svg
+          .append("text")
+          .attr("transform", `translate(${width / 2 + margin.left}, ${height + margin.top + 50})`)
+          .style("text-anchor", "middle")
+          .style("font-family", "Poppins")
+          .style("font-size", "16px")
+          .style("font-weight", "600")
+          .text(selectedYear === 'all' ? "Tahun" : "Bulan");
+
+        svg
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 30)
+          .attr("x", 0 - (height / 2 + margin.top))
+          .attr("dy", "1em")
+          .style("text-anchor", "middle")
+          .style("font-family", "Poppins")
+          .style("font-size", "16px")
+          .style("font-weight", "600")
+          .text("Jumlah Gempa");
+
+        // Title
+        svg
+          .append("text")
+          .attr("x", svgWidth / 2)
+          .attr("y", 30)
+          .attr("text-anchor", "middle")
+          .style("font-family", "Poppins")
+          .style("font-size", "18px")
+          .style("font-weight", "700")
+          .style("fill", "#2c3e50")
+          .text(`Distribusi Gempa Berdasarkan Kedalaman ${selectedYear === 'all' ? '(2009-2022)' : selectedYear}`);
+
+        // Legend
+        const legend = svg
+          .append("g")
+          .attr("id", "legend")
+          .attr("transform", `translate(${width + margin.left + 20}, ${margin.top + 50})`);
+
+        const legendData = [
+          { color: "#4285F4", label: "Dalam" },
+          { color: "#34A853", label: "Menengah" },
+          { color: "#FBBC05", label: "Dangkal" }
+        ];
+
+        const legendItems = legend
+          .selectAll(".legend-item")
+          .data(legendData)
+          .enter()
+          .append("g")
+          .attr("class", "legend-item")
+          .attr("transform", (d, i) => `translate(0, ${i * 30})`);
+
+        legendItems
+          .append("rect")
+          .attr("width", 20)
+          .attr("height", 20)
+          .attr("fill", d => d.color)
+          .attr("stroke", "white")
+          .attr("stroke-width", 1);
+
+        legendItems
+          .append("text")
+          .attr("x", 30)
+          .attr("y", 15)
+          .attr("class", "legend-text")
+          .text(d => d.label);
+
+        // Remove tooltip when done
+        setTimeout(() => {
+          if (tooltip) tooltip.remove();
+        }, 5000);
+      }
+
+      // Inisialisasi saat halaman dimuat
+      document.addEventListener('DOMContentLoaded', function() {
+        initializeYearOptions();
+        updateHistogram();
+      });
+    </script>
+  </body>
+</html>
