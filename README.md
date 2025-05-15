@@ -42,5 +42,5 @@ Proyek ini bertujuan untuk menyediakan visualisasi interaktif dari data gempa bu
 
 ## 📊 Data
 
-Data gempa bumi diambil dari(https://www.kaggle.com/datasets/kekavigi/earthquakes-in-indonesia/data) dan disimpan dalam format CSV.
+Data gempa bumi diambil dari (https://www.kaggle.com/datasets/kekavigi/earthquakes-in-indonesia/data) dan disimpan dalam format CSV.
 File indonesia-province.json berisi data geoJSON untuk peta interaktif.
